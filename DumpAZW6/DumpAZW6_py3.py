@@ -18,7 +18,7 @@ mod: GPL v3
 """
 __author__     = 'fireattack, junk2ool'
 __maintainer__ = 'KazuSoap'
-__url__        =
+__url__        =\
 """
 origin: https://gist.githubusercontent.com/fireattack/99b7d9f6b2896cfa33944555d9e2a158/raw/a10248392e8741048adddfe4f43f422db28d0b2a/DumpAZW6_py3.py
 mod: https://github.com/junk2ool/kindleunpack-calibre-plugin-zip-mod/raw/master/kindleunpackcore/DumpAZW6_v01.py
@@ -299,7 +299,7 @@ def usage(progname):
     print("   Dump the image from an AZW6 HD container file")
     print("  ")
     print("Usage:")
-    print("  %s -h infile.azw6" % progname)
+    print("  %s infile.azw6 outdir" % progname)
     print("  ")
     print("Options:")
     print("    -h           print this help message")

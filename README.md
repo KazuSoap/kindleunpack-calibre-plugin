@@ -12,11 +12,7 @@ A calibre plugin based/wrapped around the KindleUnpack software.
 
 If the '*.res' file exists in the following directory, decode it into a high resolution image and replace it with the corresponding image:
 
-  Kindle_Content_dir/ebook_dir/*.res
-
-    or
-
-  calibre_library_dir/ebook_dir/*.res
+    "Kindle_Content_dir/ebook_dir/*.res" or "calibre_library_dir/ebook_dir/*.res"
 
 
 Links

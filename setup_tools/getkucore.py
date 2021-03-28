@@ -17,6 +17,11 @@ if sys.version_info >= (3,):
 else:
     import urllib2
 
+if os.name == "nt":
+    import _locale
+    _locale._gdl_bak = _locale._getdefaultlocale
+    _locale._getdefaultlocale = (lambda *args: (_locale._gdl_bak()[0], 'utf8'))
+
 SCRIPT_DIR = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 SOURCE_DIR = os.path.dirname(SCRIPT_DIR)
 COMMIT_SHA = 'c8be31a196fd92803f78ad34a3f18d40319bbac5'

@@ -1,6 +1,6 @@
-diff -uprN kindleunpackcore/kindleunpack.py kindleunpackcore_mod/kindleunpack.py
---- kindleunpackcore/kindleunpack.py	2021-03-28 21:16:32.562830200 +0900
-+++ kindleunpackcore_mod/kindleunpack.py	2021-03-28 19:32:13.406650200 +0900
+diff -uprN ../kindleunpackcore_mod/kindleunpack.py ../kindleunpackcore/kindleunpack.py
+--- ../kindleunpackcore_mod/kindleunpack.py	2021-03-28 22:42:44.381771200 +0900
++++ ../kindleunpackcore/kindleunpack.py	2021-03-28 19:32:13.406650200 +0900
 @@ -11,10 +11,12 @@ import os
  import sys
  # import codecs
@@ -116,9 +116,9 @@ diff -uprN kindleunpackcore/kindleunpack.py kindleunpackcore_mod/kindleunpack.py
      process_all_mobi_headers(files, apnxfile, sect, mhlst, K8Boundary, False, epubver, use_hd)
  
      if DUMP:
-diff -uprN kindleunpackcore/mobi_cover.py kindleunpackcore_mod/mobi_cover.py
---- kindleunpackcore/mobi_cover.py	2021-03-28 21:16:32.562830200 +0900
-+++ kindleunpackcore_mod/mobi_cover.py	2021-03-28 19:16:26.756671400 +0900
+diff -uprN ../kindleunpackcore_mod/mobi_cover.py ../kindleunpackcore/mobi_cover.py
+--- ../kindleunpackcore_mod/mobi_cover.py	2021-03-28 22:42:44.377768900 +0900
++++ ../kindleunpackcore/mobi_cover.py	2021-03-28 19:16:26.756671400 +0900
 @@ -35,6 +35,8 @@ MAX_HEIGHT = 4096
  
  def get_image_type(imgname, imgdata=None):
@@ -155,9 +155,9 @@ diff -uprN kindleunpackcore/mobi_cover.py kindleunpackcore_mod/mobi_cover.py
          try:
              pos = 0
              size = 2
-diff -uprN kindleunpackcore/mobi_nav.py kindleunpackcore_mod/mobi_nav.py
---- kindleunpackcore/mobi_nav.py	2021-03-28 21:16:32.562830200 +0900
-+++ kindleunpackcore_mod/mobi_nav.py	2021-03-28 19:13:01.710675400 +0900
+diff -uprN ../kindleunpackcore_mod/mobi_nav.py ../kindleunpackcore/mobi_nav.py
+--- ../kindleunpackcore_mod/mobi_nav.py	2021-03-28 22:42:44.381771200 +0900
++++ ../kindleunpackcore/mobi_nav.py	2021-03-28 19:13:01.710675400 +0900
 @@ -117,6 +117,15 @@ class NAVProcessor(object):
              indent1 = '  ' * (2 + lvl * 2)
              indent2 = '  ' * (3 + lvl * 2)
@@ -174,9 +174,9 @@ diff -uprN kindleunpackcore/mobi_nav.py kindleunpackcore_mod/mobi_nav.py
              for i in range(start, end):
                  e = indx_data[i]
                  htmlfile = e['filename']
-diff -uprN kindleunpackcore/unpack_structure.py kindleunpackcore_mod/unpack_structure.py
---- kindleunpackcore/unpack_structure.py	2021-03-28 21:16:32.562830200 +0900
-+++ kindleunpackcore_mod/unpack_structure.py	2021-03-28 18:58:42.322668100 +0900
+diff -uprN ../kindleunpackcore_mod/unpack_structure.py ../kindleunpackcore/unpack_structure.py
+--- ../kindleunpackcore_mod/unpack_structure.py	2021-03-28 22:42:44.381771200 +0900
++++ ../kindleunpackcore/unpack_structure.py	2021-03-28 18:58:42.322668100 +0900
 @@ -22,6 +22,8 @@ import zipfile
  import binascii
  from .mobi_utils import mangle_fonts

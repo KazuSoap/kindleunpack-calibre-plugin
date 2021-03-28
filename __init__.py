@@ -11,14 +11,16 @@ __docformat__ = 'restructuredtext en'
 
 from calibre.customize import InterfaceActionBase
 
-PLUGIN_NAME = 'KindleUnpack - The Plugin'
+PLUGIN_NAME = 'KindleUnpack with DumpAZW6 - The Plugin'
 PLUGIN_DESCRIPTION = '\nUnpacks a Kindle Book/MOBI into its source components.'
-PLUGIN_VERSION_TUPLE = (0, 83, 0)
+PLUGIN_VERSION_TUPLE = (0, 83, 3)
 PLUGIN_VERSION = '.'.join([str(x) for x in PLUGIN_VERSION_TUPLE])
 PLUGIN_AUTHORS = \
 """DiapDealer.
 Original mobiunpack.py, Copyright © 2009 Charles M. Hannum <root@ihack.net>.
-Extensions / Improvements Copyright © 2009-2012 P. Durrant, K. Hendricks, S. Siebert, fandrieu, DiapDealer, nickredding, tkeo.\n"""
+Extensions / Improvements Copyright © 2009-2012 P. Durrant, K. Hendricks, S. Siebert, fandrieu, DiapDealer, nickredding, tkeo.
+ZIP mod Copyright © 2019 junk2ool.
+"""
 
 #####################################################################
 

@@ -7,6 +7,7 @@ from __future__ import (unicode_literals, division, absolute_import,
 
 import os
 import sys
+import shutil
 import re
 import codecs
 import glob
@@ -24,7 +25,7 @@ except LookupError:
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 
-PLUGIN_DIRS = ['images', 'kindleunpackcore']
+PLUGIN_DIRS = ['images', 'kindleunpackcore', 'translations']
 
 PLUGIN_FILES = ['__init__.py',
             'action.py',
@@ -102,6 +103,11 @@ if __name__ == "__main__":
     print('Removing any previous build leftovers ...')
     removePreviousZip()
 
+    DumpAZW6_name = 'DumpAZW6_py3.py'
+    DumpAZW6_src = os.path.join(SCRIPT_DIR, 'DumpAZW6', DumpAZW6_name)
+    DumpAZW6_dst = os.path.join(SCRIPT_DIR, PLUGIN_DIRS[1])
+    shutil.copy(DumpAZW6_src, DumpAZW6_dst)
+
     print('Creating {} ...'.format(os.path.basename(PLUGIN_NAME)))
     files = os.listdir(SCRIPT_DIR)
     outzip = zipfile.ZipFile(PLUGIN_NAME, 'w')
@@ -112,6 +118,8 @@ if __name__ == "__main__":
         elif os.path.isdir(filepath) and entry in PLUGIN_DIRS:
             zipUpDir(outzip, SCRIPT_DIR, entry)
     outzip.close()
+
+    os.remove(os.path.join(DumpAZW6_dst, DumpAZW6_name))
 
     print('Plugin successfully created!')
 

@@ -1,10 +1,23 @@
-KindleUnpack the calibre Plugin
+KindleUnpack the calibre Plugin (with DumpAZW6)
 ============
 
 Open KindleBooks in Sigil
 
-A calibre plugin based/wrapped around the KindleUnpack software. 
+A calibre plugin based/wrapped around the KindleUnpack software.
 (python based software to unpack Amazon / Kindlegen generated ebooks)
+
+### Features added in this mod
+
+* DumpAZW6
+
+If the '*.res' file exists in the following directory, decode it into a high resolution image and replace it with the corresponding image:
+
+  Kindle_Content_dir/ebook_dir/*.res
+
+    or
+
+  calibre_library_dir/ebook_dir/*.res
+
 
 Links
 =====
@@ -73,10 +86,10 @@ It's important to note that any import statements in the above files that look l
 
 are actually referring to a 'blah' module / script in the kindleunpackcore directory.
 These imports will only "work" in the context of a calibre plugin's structure and the calibre
-environment. If you need to refer to or call those modules that's where they'll be. 
+environment. If you need to refer to or call those modules that's where they'll be.
 But as mentioned above ... go upstream if you have patches or pull requests for those files.
 
-For example, if you need to import something from the kindleunpackcore/ directory (for example: 
+For example, if you need to import something from the kindleunpackcore/ directory (for example:
 compatibility_utils.py), you would use:
 
     from calibre_plugins.kindleunpack_plugin.kindleunpackcore.compatibility_utils import PY2
@@ -107,7 +120,7 @@ License Information
 ### KindleUnpack (https://github.com/kevinhendricks/KindleUnpack)
 
     Based on initial mobipocket version Copyright © 2009 Charles M. Hannum <root@ihack.net>
-    Extensive Extensions and Improvements Copyright © 2009-2014 
+    Extensive Extensions and Improvements Copyright © 2009-2014
     By P. Durrant, K. Hendricks, S. Siebert, fandrieu, DiapDealer, nickredding, tkeo.
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -122,7 +135,7 @@ License Information
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
-    in the Software without restriction, including without limitation the rights    
+    in the Software without restriction, including without limitation the rights
     to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
     copies of the Software, and to permit persons to whom the Software is
     furnished to do so, subject to the following conditions:
@@ -137,4 +150,3 @@ License Information
     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
     THE SOFTWARE.
-

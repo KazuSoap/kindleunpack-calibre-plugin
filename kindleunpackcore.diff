@@ -1,0 +1,236 @@
+diff -uprN kindleunpackcore/kindleunpack.py kindleunpackcore_mod/kindleunpack.py
+--- kindleunpackcore/kindleunpack.py	2021-03-28 21:16:32.562830200 +0900
++++ kindleunpackcore_mod/kindleunpack.py	2021-03-28 19:32:13.406650200 +0900
+@@ -11,10 +11,12 @@ import os
+ import sys
+ # import codecs
+ import traceback
++import glob
+ 
+ from .compatibility_utils import PY2, binary_type, utf8_str, unicode_str
+ from .compatibility_utils import unicode_argv, add_cp65001_codec
+ from .compatibility_utils import hexlify
++from .DumpAZW6_py3 import DumpAZW6
+ 
+ add_cp65001_codec()
+ 
+@@ -329,9 +331,9 @@ def processCRES(i, files, rscnames, sect
+         imgname = rscnames[rsc_ptr]
+         imgdest = files.imgdir
+     else:
+-        imgname = "HDimage%05d.%s" % (i, imgtype)
++        imgname = "HDimage%05d.%s" % (i-beg+1, imgtype)
+         imgdest = files.hdimgdir
+-    print("Extracting HD image: {0:s} from section {1:d}".format(imgname,i))
++    print("Extracting HD image: {0:s} from section {1:d}".format(imgname,i-beg+1))
+     outimg = os.path.join(imgdest, imgname)
+     with open(pathof(outimg), 'wb') as f:
+         f.write(data)
+@@ -412,12 +414,12 @@ def processImage(i, files, rscnames, sec
+             sect.setsectiondescription(i,"Mysterious Section, first four bytes %s extracting as %s" % (describe(data[0:4]), fname))
+         return rscnames, rsc_ptr
+ 
+-    imgname = "image%05d.%s" % (i, imgtype)
++    imgname = "image%05d.%s" % (i-beg+1, imgtype)
+     if cover_offset is not None and i == beg + cover_offset:
+-        imgname = "cover%05d.%s" % (i, imgtype)
++        imgname = "cover%05d.%s" % (i-beg+1, imgtype)
+     if thumb_offset is not None and i == beg + thumb_offset:
+         imgname = "thumb%05d.%s" % (i, imgtype)
+-    print("Extracting image: {0:s} from section {1:d}".format(imgname,i))
++    print("Extracting image: {0:s} from section {1:d}".format(imgname,i-beg+1))
+     outimg = os.path.join(files.imgdir, imgname)
+     with open(pathof(outimg), 'wb') as f:
+         f.write(data)
+@@ -467,7 +469,7 @@ def processPrintReplica(metadata, files,
+     opf.writeOPF()
+ 
+ 
+-def processMobi8(mh, metadata, sect, files, rscnames, pagemapproc, k8resc, obfuscate_data, apnxfile=None, epubver='2'):
++def processMobi8(mh, metadata, sect, files, rscnames, pagemapproc, k8resc, obfuscate_data, apnxfile=None, epubver='A'):
+     global DUMP
+     global WRITE_RAW_DATA
+ 
+@@ -600,9 +602,14 @@ def processMobi8(mh, metadata, sect, fil
+         nav = NAVProcessor(files)
+         nav.writeNAV(ncx_data, guidetext, metadata)
+ 
++    # get cover offset
++    cover_offset = None
++    if CREATE_COVER_PAGE:
++        cover_offset = int(mh.metadata.get('CoverOffset', ['-1'])[0])
++
+     # make an epub-like structure of it all
+     print("Creating an epub-like file")
+-    files.makeEPUB(usedmap, obfuscate_data, uuid)
++    files.makeEPUB(usedmap, obfuscate_data, uuid, cover_offset)
+ 
+ 
+ def processMobi7(mh, metadata, sect, files, rscnames):
+@@ -735,7 +742,7 @@ def processUnknownSections(mh, sect, fil
+             sect.setsectiondescription(i, description)
+ 
+ 
+-def process_all_mobi_headers(files, apnxfile, sect, mhlst, K8Boundary, k8only=False, epubver='2', use_hd=False):
++def process_all_mobi_headers(files, apnxfile, sect, mhlst, K8Boundary, k8only=False, epubver='A', use_hd=False):
+     global DUMP
+     global WRITE_RAW_DATA
+     rscnames = []
+@@ -784,7 +791,7 @@ def process_all_mobi_headers(files, apnx
+             end = K8Boundary
+ 
+         # Not sure the try/except is necessary, but just in case
+-        try: 
++        try:
+             thumb_offset = int(metadata.get('ThumbOffset', ['-1'])[0])
+         except:
+             thumb_offset = None
+@@ -860,7 +867,7 @@ def process_all_mobi_headers(files, apnx
+     return
+ 
+ 
+-def unpackBook(infile, outdir, apnxfile=None, epubver='2', use_hd=False, dodump=False, dowriteraw=False, dosplitcombos=False):
++def unpackBook(infile, outdir, apnxfile=None, epubver='A', use_hd=False, dodump=False, dowriteraw=False, dosplitcombos=False, contentdir=''):
+     global DUMP
+     global WRITE_RAW_DATA
+     global SPLIT_COMBO_MOBIS
+@@ -931,6 +938,21 @@ def unpackBook(infile, outdir, apnxfile=
+     if hasK8:
+         files.makeK8Struct()
+ 
++    #  call DumpAZW6
++    # ASIN = mh.metadata.get('ASIN')
++    CDEContentKey = mh.metadata.get('CDEContentKey')
++    cdeType = mh.metadata.get('cdeType')
++    resdir = os.path.join(contentdir, '{}_{}'.format(CDEContentKey[0], cdeType[0]))
++    res_files = glob.glob(os.path.join(resdir, '*.res'))
++    if len(res_files):
++        for res_path in res_files:
++            DumpAZW6(res_path, outdir)
++    else:
++        res_files = glob.glob(os.path.join(os.path.dirname(infile), '*.res'))
++        for res_path in res_files:
++            DumpAZW6(res_path, outdir)
++    #
++
+     process_all_mobi_headers(files, apnxfile, sect, mhlst, K8Boundary, False, epubver, use_hd)
+ 
+     if DUMP:
+diff -uprN kindleunpackcore/mobi_cover.py kindleunpackcore_mod/mobi_cover.py
+--- kindleunpackcore/mobi_cover.py	2021-03-28 21:16:32.562830200 +0900
++++ kindleunpackcore_mod/mobi_cover.py	2021-03-28 19:16:26.756671400 +0900
+@@ -35,6 +35,8 @@ MAX_HEIGHT = 4096
+ 
+ def get_image_type(imgname, imgdata=None):
+     imgtype = unicode_str(imghdr.what(pathof(imgname), imgdata))
++    if imgtype == 'jpeg':
++        imgtype = 'jpg'
+ 
+     # imghdr only checks for JFIF or Exif JPEG files. Apparently, there are some
+     # with only the magic JPEG bytes out there...
+@@ -50,7 +52,7 @@ def get_image_type(imgname, imgdata=None
+                 last-=1
+             # Be extra safe, check the trailing bytes, too.
+             if imgdata[last-2:last] == b'\xFF\xD9':
+-                imgtype = "jpeg"
++                imgtype = "jpg"
+     return imgtype
+ 
+ 
+@@ -76,7 +78,7 @@ def get_image_size(imgname, imgdata=None
+         width, height = struct.unpack(b'>ii', head[16:24])
+     elif imgtype == 'gif':
+         width, height = struct.unpack(b'<HH', head[6:10])
+-    elif imgtype == 'jpeg' and imgdata is None:
++    elif imgtype == 'jpg' and imgdata is None:
+         try:
+             fhandle.seek(0)  # Read 0xff next
+             size = 2
+@@ -93,7 +95,7 @@ def get_image_size(imgname, imgdata=None
+             height, width = struct.unpack(b'>HH', fhandle.read(4))
+         except Exception:  # IGNORE:W0703
+             return
+-    elif imgtype == 'jpeg' and imgdata is not None:
++    elif imgtype == 'jpg' and imgdata is not None:
+         try:
+             pos = 0
+             size = 2
+diff -uprN kindleunpackcore/mobi_nav.py kindleunpackcore_mod/mobi_nav.py
+--- kindleunpackcore/mobi_nav.py	2021-03-28 21:16:32.562830200 +0900
++++ kindleunpackcore_mod/mobi_nav.py	2021-03-28 19:13:01.710675400 +0900
+@@ -117,6 +117,15 @@ class NAVProcessor(object):
+             indent1 = '  ' * (2 + lvl * 2)
+             indent2 = '  ' * (3 + lvl * 2)
+             xhtml += indent1 + '<ol>\n'
++            #
++            nav_cover = False
++            for i in range(start, end):
++                if '表紙' in indx_data[i].values():
++                    nav_cover = True
++                    break
++            if not nav_cover:
++                xhtml += indent1 + '  <li><a href="cover_page.xhtml">表紙</a></li>\n'
++            #
+             for i in range(start, end):
+                 e = indx_data[i]
+                 htmlfile = e['filename']
+diff -uprN kindleunpackcore/unpack_structure.py kindleunpackcore_mod/unpack_structure.py
+--- kindleunpackcore/unpack_structure.py	2021-03-28 21:16:32.562830200 +0900
++++ kindleunpackcore_mod/unpack_structure.py	2021-03-28 18:58:42.322668100 +0900
+@@ -22,6 +22,8 @@ import zipfile
+ import binascii
+ from .mobi_utils import mangle_fonts
+ 
++from distutils import dir_util
++
+ class unpackException(Exception):
+     pass
+ 
+@@ -49,6 +51,7 @@ class fileNames:
+         self.hdimgdir = os.path.join(self.outdir,'HDImages')
+         if not unipath.exists(self.hdimgdir):
+             unipath.mkdir(self.hdimgdir)
++        self.HDimages = os.path.join(self.outdir,'azw6_images')
+         self.outbase = os.path.join(self.outdir, os.path.splitext(os.path.split(infile)[1])[0])
+ 
+     def getInputFileBasename(self):
+@@ -92,7 +95,7 @@ class fileNames:
+             elif unipath.isdir(realfilePath):
+                 self.zipUpDir(myzip, tdir, localfilePath)
+ 
+-    def makeEPUB(self, usedmap, obfuscate_data, uid):
++    def makeEPUB(self, usedmap, obfuscate_data, uid, cover_offset):
+         bname = os.path.join(self.k8dir, self.getInputFileBasename() + '.epub')
+         # Create an encryption key for Adobe font obfuscation
+         # based on the epub's uid
+@@ -151,6 +154,9 @@ xmlns:enc="http://www.w3.org/2001/04/xml
+             with open(pathof(fileout),'wb') as f:
+                 f.write(encryption.encode('utf-8'))
+ 
++        # replace res HD images
++        self.replaceHDimages(self.HDimages, self.k8images, cover_offset)
++
+         # ready to build epub
+         self.outzip = zipfile.ZipFile(pathof(bname), 'w')
+ 
+@@ -165,3 +171,20 @@ xmlns:enc="http://www.w3.org/2001/04/xml
+         self.zipUpDir(self.outzip,self.k8dir,'META-INF')
+         self.zipUpDir(self.outzip,self.k8dir,'OEBPS')
+         self.outzip.close()
++
++    def replaceHDimages(self, src_dir, dest_dir, cover_offset):
++        # replace res HD images
++        if unipath.exists(src_dir):
++            dir_util.copy_tree(src_dir, dest_dir)
++
++            # rename HD cover image
++            if cover_offset is not None:
++                imgtype = 'jpg'
++                imgname = "image%05d.%s" % (cover_offset+1, imgtype)
++                imgpath = os.path.join(dest_dir, imgname)
++                cvrname = "cover%05d.%s" % (cover_offset+1, imgtype)
++                cvrpath = os.path.join(dest_dir, cvrname)
++                if unipath.exists(imgpath):
++                    if unipath.exists(cvrpath):
++                        os.remove(cvrpath)
++                    os.rename(imgpath, cvrpath)

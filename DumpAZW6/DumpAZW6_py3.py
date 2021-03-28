@@ -1,12 +1,28 @@
 #!/usr/bin/env python
 # vim:fileencoding=UTF-8:ts=4:sw=4:sta:et:sts=4:ai
 
-__copyright__  = 'Copyright (C) 2021 fireattack'
-__version__    = 'Revisions 6'
-__license__    = 'None'
-__author__     = 'fireattack'
+__copyright__  =\
+"""
+origin: Copyright (C) 2021 fireattack
+mod: Copyright (C) 2020 junk2ool
+"""
+__version__    =\
+"""
+origin: Revisions 6
+mod: v0.3
+"""
+__license__    =\
+"""
+origin: None
+mod: GPL v3
+"""
+__author__     = 'fireattack, junk2ool'
 __maintainer__ = 'KazuSoap'
-__url__        = 'https://gist.githubusercontent.com/fireattack/99b7d9f6b2896cfa33944555d9e2a158/raw/a10248392e8741048adddfe4f43f422db28d0b2a/DumpAZW6_py3.py'
+__url__        =
+"""
+origin: https://gist.githubusercontent.com/fireattack/99b7d9f6b2896cfa33944555d9e2a158/raw/a10248392e8741048adddfe4f43f422db28d0b2a/DumpAZW6_py3.py
+mod: https://github.com/junk2ool/kindleunpack-calibre-plugin-zip-mod/raw/master/kindleunpackcore/DumpAZW6_v01.py
+"""
 __docformat__  = 'restructuredtext en'
 
 import sys

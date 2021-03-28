@@ -12,8 +12,15 @@ A calibre plugin based/wrapped around the KindleUnpack software.
 
 If the '*.res' file exists in the following directory, decode it into a high resolution image and replace it with the corresponding image:
 
-    "Kindle_Content_dir/ebook_dir/*.res" or "calibre_library_dir/ebook_dir/*.res"
+    `Kindle_Content_dir/ebook_dir/*.res` or `calibre_library_dir/ebook_dir/*.res`
 
+* Japanese translation
+
+-----
+
+#### Notice
+
+These functions were imported from "KindleUnpack the calibre Plugin + ZIP mod" by junk2ool.
 
 Links
 =====
@@ -22,14 +29,19 @@ Links
 * The KindleUnpack python-based software can be found at https://github.com/kevinhendricks/KindleUnpack
 * python-patch (used to help build the plugin) can be found at https://github.com/techtonik/python-patch
 
+### for this mod
+* "KindleUnpack the calibre Plugin" (original) can be found https://github.com/dougmassay/kindleunpack-calibre-plugin
+* "KindleUnpack the calibre Plugin + ZIP mod" can be found https://github.com/junk2ool/kindleunpack-calibre-plugin-zip-mod
+* DumpAZW6 can be found at https://gist.github.com/fireattack/99b7d9f6b2896cfa33944555d9e2a158
+
 Building
 ========
 
 First, clone the repo:
 
-    $ git clone https://github.com/dougmassay/kindleunpack-calibre-plugin.git
+    $ git clone https://github.com/KazuSoap/kindleunpack-calibre-plugin.git
 
-Then you need to prepare the source by downloading some core files from the KindleUnpack project. I'm not going to track those files here since they're already maintained in another Git repository. There's a script in the 'setup_tools' folder that will download/patch what you need. Just cd into the 'setup_tools' folder and run the getkucore.py script with Python 2.7+ or 3.4+ (don't try to run the script from outside the 'setup_tools' folder).
+Then you need to prepare the source by downloading some core files from the KindleUnpack project. I'm not going to track those files here since they're already maintained in another Git repository. There's a script in the 'setup_tools' folder that will download/patch what you need. Just cd into the 'setup_tools' folder and run the getkucore.py script with 3.4+ (don't try to run the script from outside the 'setup_tools' folder).
 
     $ cd ./kindleunpack-calibre-plugin/setup_tools
     $ python getkucore.py
@@ -110,6 +122,18 @@ License Information
 =======
 
 ### KindleUnpack the Calibre Plugin
+
+    Copyright © 2009-2012 P. Durrant, K. Hendricks, S. Siebert, fandrieu, DiapDealer, nickredding, tkeo.
+
+    Licensed under the GPLv3.
+
+### KindleUnpack the calibre Plugin + ZIP mod
+
+    Copyright © 2019 junk2ool.
+
+    Licensed under the GPLv3.
+
+### KindleUnpack the Calibre Plugin (with DumpAZW6)
 
     Licensed under the GPLv3.
 

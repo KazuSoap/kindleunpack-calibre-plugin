@@ -1,6 +1,14 @@
 #!/usr/bin/env python
 # vim:fileencoding=UTF-8:ts=4:sw=4:sta:et:sts=4:ai
 
+__copyright__  = 'Copyright (C) 2021 fireattack'
+__version__    = 'Revisions 6'
+__license__    = 'None'
+__author__     = 'fireattack'
+__maintainer__ = 'KazuSoap'
+__url__        = 'https://gist.githubusercontent.com/fireattack/99b7d9f6b2896cfa33944555d9e2a158/raw/a10248392e8741048adddfe4f43f422db28d0b2a/DumpAZW6_py3.py'
+__docformat__  = 'restructuredtext en'
+
 import sys
 
 import os, getopt, struct
@@ -41,13 +49,13 @@ def processCRES(i, data):
     print("        Extracting HD image: {0:s} from section {1:d}".format(imgname,i))
     imgpath = os.path.join(imgdir, imgname)
     with open(imgpath, 'wb') as f:
-        f.write(data) 
+        f.write(data)
     return
 
-# this is just guesswork so far, making big assumption that 
+# this is just guesswork so far, making big assumption that
 # metavalue key numbers reamin the same in the CONT EXTH
 def dump_contexth(codec, extheader):
-    
+
     # determine text encoding
     if extheader == '':
         return
@@ -250,16 +258,16 @@ class HdrParser:
                     print("  Field: %20s   Offset: 0x%03x   Width:  %d   Value: %s" % (key, pos, tot_len, self.hdr[key].decode()))
                 else:
                     print(("  Field: %20s   Offset: 0x%03x   Width:  %d   Value: 0x%0" + str(tot_len) + "x") % (key, pos, tot_len, self.hdr[key]))
-                
+
         print("EXTH Region Length:  0x%0x" % len(self.exth))
         print("EXTH MetaData")
 
         #print(f'stdin: {sys.stdin.encoding}, stdout: {sys.stdout.encoding}')
-        try: 
+        try:
             print(self.title)
-        except: # It will have problem otherwise in certain env, such as when redirect output to '> 1.txt'            
+        except: # It will have problem otherwise in certain env, such as when redirect output to '> 1.txt'
             print(self.title.encode(sys.stdout.encoding, "ignore").decode(sys.stdout.encoding))
-        
+
         dump_contexth(self.codec, self.exth)
         return
 
@@ -284,7 +292,7 @@ def main(argv=sys.argv):
         print(str(err))
         usage(progname)
         sys.exit(2)
-    
+
     if len(args) != 1:
         usage(progname)
         sys.exit(2)
@@ -342,9 +350,9 @@ def main(argv=sys.argv):
             before, after = pp.getsecaddr(i)
             data = pp.readsection(i)
             dlen = len(data)
-            dt = data[0:4]            
+            dt = data[0:4]
             dtext = data[0:12]
-            desc = '' 
+            desc = ''
             if dtext in list(dtmap2.keys()):
                 desc = data.decode()
                 linkhrefs = []
@@ -368,7 +376,7 @@ def main(argv=sys.argv):
     except Exception as e:
         print("Error: %s" % e)
         return 1
-    
+
     return 0
 
 
